@@ -1,47 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   html {
-    font-family: Monaco, Menlo, 'Ubuntu Mono', monospace;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
   }
   
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-neutral-100 text-black;
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: unset;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+
+  h1 { @apply text-6xl mb-4 text-black leading-none; }
+  h2 { @apply text-3xl mb-4 text-black leading-tight; }
+  h3 { @apply text-xl mb-3 text-black leading-tight; }
 }
 
 @layer components {
+  .container-brutal {
+    @apply max-w-7xl mx-auto px-4;
+  }
+
+  .nav-link {
+    @apply text-black hover:text-orange-600 transition-none font-medium uppercase tracking-wide;
+  }
+
+  .block {
+    @apply bg-white border-4 border-black shadow-brutal;
+  }
+
+  .block-dark {
+    @apply bg-black text-white border-4 border-black shadow-brutal;
+  }
+
+  .block-accent {
+    @apply bg-orange-600 text-white border-4 border-black shadow-brutal;
+  }
+
+  .shadow-brutal {
+    box-shadow: 8px 8px 0px #000000;
+  }
+
+  .btn-primary {
+    @apply bg-black text-white px-8 py-4 border-4 border-black shadow-brutal font-bold uppercase tracking-wider hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all duration-100;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-black px-8 py-4 border-4 border-black shadow-brutal font-bold uppercase tracking-wider hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all duration-100;
+  }
+
+  .btn-accent {
+    @apply bg-orange-600 text-white px-8 py-4 border-4 border-black shadow-brutal font-bold uppercase tracking-wider hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all duration-100;
+  }
+
   .trajectory-display {
     @apply font-mono text-sm leading-relaxed whitespace-pre-wrap;
+    font-family: 'JetBrains Mono', monospace;
+    background: 
+      linear-gradient(45deg, #f5f5f5 25%, transparent 25%), 
+      linear-gradient(-45deg, #f5f5f5 25%, transparent 25%), 
+      linear-gradient(45deg, transparent 75%, #f5f5f5 75%), 
+      linear-gradient(-45deg, transparent 75%, #f5f5f5 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    border: 4px solid #000;
+    padding: 2rem;
   }
-  
-  .concept {
-    @apply text-blue-700 font-medium;
+
+  .trajectory-number {
+    @apply text-xs text-orange-600 font-bold;
+    vertical-align: super;
+    margin-left: 2px;
   }
-  
-  .symbol {
-    @apply text-gray-600 mx-1;
+
+  .symbol-structural { @apply text-blue-700 font-bold; }
+  .symbol-aesthetic { @apply text-purple-700 font-bold; }
+  .symbol-synthesis { @apply text-orange-600 font-bold; }
+
+  .commentary-text {
+    @apply text-black leading-normal font-medium;
+    font-size: 0.9rem;
   }
-  
-  .synthesis {
-    @apply text-purple-700 font-bold;
+
+  .page-header {
+    @apply bg-white border-b-4 border-black;
   }
-  
-  .trajectory-display {
-    line-height: 1.8;
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+
+  .symbol-key {
+    @apply bg-neutral-200 border-4 border-black p-8;
+    background-image: 
+      linear-gradient(45deg, #e5e5e5 25%, transparent 25%), 
+      linear-gradient(-45deg, #e5e5e5 25%, transparent 25%), 
+      linear-gradient(45deg, transparent 75%, #e5e5e5 75%), 
+      linear-gradient(-45deg, transparent 75%, #e5e5e5 75%);
+    background-size: 30px 30px;
+    background-position: 0 0, 0 15px, 15px -15px, -15px 0px;
   }
-  
-  .trajectory-display::before {
-    content: '';
+
+  .symbol-key-item {
+    @apply flex items-center space-x-4 py-3;
   }
-  
-  /* Style concept numbers */
-  .trajectory-display {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
+
+  .symbol-key-symbol {
+    @apply font-mono text-xl w-16 font-bold;
+  }
+
+  .symbol-key-label {
+    @apply text-black font-medium uppercase;
+  }
+
+  .prose-brutal {
+    @apply max-w-none;
+  }
+
+  .prose-brutal p {
+    @apply mb-6 text-black font-medium leading-normal;
+    font-family: 'Work Sans', sans-serif;
+  }
+
+  .prose-brutal ul {
+    @apply space-y-3 mb-6;
+  }
+
+  .prose-brutal li {
+    @apply text-black font-medium;
+  }
+
+  .prose-brutal blockquote {
+    @apply border-l-8 border-orange-600 pl-6 font-bold text-black my-8 bg-neutral-200 py-4;
+  }
+
+  .prose-brutal hr {
+    @apply border-t-4 border-black my-12 bg-black;
+    height: 4px;
+  }
+
+  .chat-message {
+    @apply p-6 border-4 border-black bg-white mb-4;
+  }
+
+  .chat-message.user {
+    @apply bg-neutral-200 border-black;
+  }
+
+  .chat-input {
+    @apply border-4 border-black px-4 py-3 focus:outline-none focus:ring-4 focus:ring-orange-600 font-mono;
+  }
+
+  .panel {
+    @apply bg-white border-4 border-black shadow-brutal;
+  }
+
+  .panel-header {
+    @apply px-6 py-4 border-b-4 border-black bg-neutral-200;
+  }
+
+  .panel-content {
+    @apply p-6;
+  }
+
+  .grid-brutal {
+    background-image: 
+      linear-gradient(#000 2px, transparent 2px),
+      linear-gradient(90deg, #000 2px, transparent 2px);
+    background-size: 40px 40px;
+    background-color: #f5f5f5;
+  }
+
+  .concrete-texture {
+    background-image: 
+      radial-gradient(circle at 2px 2px, #666 1px, transparent 0),
+      radial-gradient(circle at 18px 18px, #666 1px, transparent 0);
+    background-size: 20px 20px;
+    background-color: #e5e5e5;
   }
 }

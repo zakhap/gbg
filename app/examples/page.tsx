@@ -1,23 +1,15 @@
 import Link from 'next/link'
+import Header from '@/components/Header'
+import LearningFooter from '@/components/LearningFooter'
 
 export default function ExamplesPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-          <Link href="/" className="text-xl font-semibold text-gray-800">
-            Glass Bead Game
-          </Link>
-          <div className="flex gap-4">
-            <Link href="/guide" className="text-gray-600 hover:text-gray-800">Guide</Link>
-            <Link href="/practice" className="text-gray-600 hover:text-gray-800">Practice</Link>
-            <Link href="/play" className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Play</Link>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen grid-brutal">
+      <Header currentPage="examples" />
 
-      <div className="max-w-5xl mx-auto p-8">
-        <article className="prose prose-lg max-w-none">
+      <div className="container-brutal py-16">
+        <div className="block p-12 mb-16">
+          <article className="prose-brutal">
           <h1>Glass Bead Game: Complete Example Games</h1>
           <p className="text-gray-600">Full trajectory constructions demonstrating different patterns, aesthetics, and techniques</p>
 
@@ -201,6 +193,9 @@ export default function ExamplesPage() {
 
           <p>These complete games show how the Glass Bead Game can address the deepest questions of our time while maintaining the rigor and beauty that make intellectual work a spiritual practice.</p>
         </article>
+        </div>
+
+        <LearningFooter currentPage="examples" />
       </div>
     </div>
   )

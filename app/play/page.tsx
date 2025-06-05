@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
+import Header from '@/components/Header'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -176,41 +177,30 @@ export default function PlayPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-          <Link href="/" className="text-xl font-semibold text-gray-800">
-            Glass Bead Game
-          </Link>
-          <div className="flex gap-4">
-            {currentTrajectory && (
-              <button
-                onClick={() => setShowPublishForm(true)}
-                className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors"
-              >
-                Publish Game
-              </button>
-            )}
-            <Link 
-              href="/gallery"
-              className="text-gray-600 hover:text-gray-800 transition-colors"
-            >
-              Gallery
-            </Link>
-          </div>
+    <div className="min-h-screen">
+      <Header currentPage="play" />
+      
+      {currentTrajectory && (
+        <div className="bg-orange-600 border-b-4 border-black p-4 text-center">
+          <button
+            onClick={() => setShowPublishForm(true)}
+            className="bg-white text-black border-4 border-white px-8 py-3 font-bold uppercase tracking-wider hover:bg-neutral-200 transition-all duration-100 shadow-brutal"
+          >
+            PUBLISH GAME
+          </button>
         </div>
-      </header>
+      )}
 
-      <div className="max-w-6xl mx-auto p-4 flex gap-6 h-[calc(100vh-80px)]">
+      <div className="max-w-7xl mx-auto p-8 flex gap-8 h-[calc(100vh-100px)]">
         {/* Chat Interface */}
-        <div className="flex-1 bg-white rounded-lg shadow-md flex flex-col">
-          <div className="p-4 border-b">
-            <h2 className="text-lg font-semibold">Conversation</h2>
+        <div className="flex-1 panel flex flex-col">
+          <div className="panel-header">
+            <h2 className="text-xl font-light text-stone-700">Conversation</h2>
           </div>
           
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-8 space-y-6">
             {messages.length === 0 && (
-              <div className="text-gray-500 text-center py-8">
+              <div className="text-stone-500 text-center py-16 font-light italic">
                 Begin by sharing what concepts or themes are calling to your attention today...
               </div>
             )}
@@ -218,44 +208,40 @@ export default function PlayPage() {
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`p-3 rounded-lg ${
-                  message.role === 'user'
-                    ? 'bg-blue-50 ml-8'
-                    : 'bg-gray-50 mr-8'
-                }`}
+                className={`chat-message ${message.role === 'user' ? 'user ml-12' : 'mr-12'}`}
               >
-                <div className="text-sm text-gray-600 mb-1">
+                <div className="text-sm text-stone-500 mb-3 font-light tracking-wide">
                   {message.role === 'user' ? 'You' : 'AI Partner'}
                 </div>
-                <div className="whitespace-pre-wrap">{message.content}</div>
+                <div className="whitespace-pre-wrap leading-relaxed">{message.content}</div>
               </div>
             ))}
             
             {isLoading && (
-              <div className="bg-gray-50 mr-8 p-3 rounded-lg">
-                <div className="text-sm text-gray-600 mb-1">AI Partner</div>
-                <div className="text-gray-500">Contemplating...</div>
+              <div className="chat-message mr-12">
+                <div className="text-sm text-stone-500 mb-3 font-light tracking-wide">AI Partner</div>
+                <div className="text-stone-500 italic">Contemplating...</div>
               </div>
             )}
             
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="p-4 border-t">
-            <div className="flex gap-2">
+          <div className="p-8 border-t border-stone-200">
+            <div className="flex gap-4">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Share your thoughts..."
-                className="flex-1 p-3 border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows={2}
+                className="flex-1 chat-input resize-none"
+                rows={3}
                 disabled={isLoading}
               />
               <button
                 onClick={sendMessage}
                 disabled={isLoading || !input.trim()}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="btn-primary px-8 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Send
               </button>
@@ -264,37 +250,37 @@ export default function PlayPage() {
         </div>
 
         {/* Right Column - Sticky Panels */}
-        <div className="w-[500px] flex flex-col gap-4">
+        <div className="w-[520px] flex flex-col gap-8">
           {/* Trajectory Panel */}
-          <div className="bg-white rounded-lg shadow-md sticky top-4">
-            <div className="p-4 border-b">
-              <h2 className="text-lg font-semibold">Current Trajectory</h2>
+          <div className="panel sticky top-8">
+            <div className="panel-header">
+              <h2 className="text-xl font-light text-stone-700">Current Trajectory</h2>
             </div>
-            <div className="p-4 max-h-80 overflow-y-auto">
+            <div className="panel-content max-h-80 overflow-y-auto">
               {currentTrajectory ? (
-                <pre className="trajectory-display text-sm">
+                <div className="trajectory-display">
                   {currentTrajectory}
-                </pre>
+                </div>
               ) : (
-                <div className="text-gray-500 text-center py-8">
-                  Your trajectory will appear here...
+                <div className="text-stone-500 text-center py-16 font-light italic">
+                  Your trajectory will appear here as you construct it...
                 </div>
               )}
             </div>
           </div>
 
           {/* Commentary Panel */}
-          <div className="bg-white rounded-lg shadow-md sticky top-96">
-            <div className="p-4 border-b">
-              <h2 className="text-lg font-semibold">Commentary</h2>
+          <div className="panel sticky top-96">
+            <div className="panel-header">
+              <h2 className="text-xl font-light text-stone-700">Commentary</h2>
             </div>
-            <div className="p-4 max-h-80 overflow-y-auto">
+            <div className="panel-content max-h-80 overflow-y-auto">
               {currentCommentary ? (
-                <div className="text-sm whitespace-pre-wrap">
+                <div className="commentary-text whitespace-pre-wrap">
                   {currentCommentary}
                 </div>
               ) : (
-                <div className="text-gray-500 text-center py-8">
+                <div className="text-stone-500 text-center py-16 font-light italic">
                   Context and footnotes will appear here...
                 </div>
               )}
@@ -360,70 +346,71 @@ function PublishForm({
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <h3 className="text-xl font-semibold mb-4">Publish Your Game</h3>
-          
-          <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="fixed inset-0 bg-stone-900 bg-opacity-60 flex items-center justify-center p-8 z-50">
+      <div className="panel max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="panel-header">
+          <h3 className="text-2xl font-light text-stone-800">Publish Your Game</h3>
+        </div>
+        <div className="panel-content">
+          <form onSubmit={handleSubmit} className="space-y-8">
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-stone-700 font-light mb-3">
                 Pseudonym
               </label>
               <input
                 type="text"
                 value={pseudonym}
                 onChange={(e) => setPseudonym(e.target.value)}
-                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="chat-input w-full"
                 required
                 maxLength={50}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-stone-700 font-light mb-3">
                 Title
               </label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className="chat-input w-full"
                 required
                 maxLength={200}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-stone-700 font-light mb-3">
                 Final Reflection
               </label>
               <textarea
                 value={commentary}
                 onChange={(e) => setCommentary(e.target.value)}
-                rows={6}
-                className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                rows={8}
+                className="chat-input w-full resize-none"
                 placeholder="Reflect on the overall insights and patterns that emerged from this trajectory..."
                 required
                 maxLength={2000}
               />
-              <div className="text-xs text-gray-500 mt-1">
+              <div className="text-sm text-stone-500 mt-2 font-light italic">
                 Concept footnotes will be included automatically from your conversation.
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4">
+            <div className="flex justify-end gap-6 pt-6">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                className="text-stone-600 hover:text-stone-800 transition-colors font-light"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Publishing...' : 'Publish'}
               </button>
