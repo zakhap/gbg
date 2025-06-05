@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import SimpleTrajectoryDisplay from '@/components/SimpleTrajectoryDisplay'
 
 export default function Home() {
   return (
@@ -140,11 +141,21 @@ export default function Home() {
           
           <div className="mt-16 block p-8">
             <h4 className="font-bold mb-6 text-black text-xl">EXAMPLE TRAJECTORY</h4>
-            <div className="trajectory-display mb-6">
-[TECHNOLOGY]<span className="trajectory-number">1</span> ~~~ [HUMAN NATURE]<span className="trajectory-number">2</span> ═══ [CYBORG]<span className="trajectory-number">3</span> ※
+            <div className="mb-6 h-64">
+              <SimpleTrajectoryDisplay 
+                trajectoryState={{
+                  trajectory: [{ text: "[TECHNOLOGY]1 ~~~ [HUMAN NATURE]2 ═══ [CYBORG]3 ※" }],
+                  commentary: {
+                    "1": "Technology: The application of scientific knowledge for practical purposes",
+                    "2": "Human Nature: Our essential characteristics and ways of being",
+                    "3": "Cyborg: The hybrid entity emerging from human-tech integration"
+                  }
+                }}
+                className="scale-90 origin-top-left"
+              />
             </div>
             <p className="text-black font-medium uppercase tracking-wide">
-              Numbers correspond to explanatory footnotes that provide context for each concept.
+              Visual display shows concepts as interactive blocks with numbered footnotes.
             </p>
           </div>
         </div>

@@ -3,33 +3,23 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import Header from '@/components/Header'
-
-interface Message {
-  role: 'user' | 'assistant'
-  content: string
-}
-
-interface TrajectoryStep {
-  left: string
-  connection: string
-  right: string
-  synthesis?: string | null
-}
-
-interface ParsedResponse {
-  response: string
-  trajectory: TrajectoryStep[]
-  commentary: Record<string, string>
-}
+import SimpleTrajectoryDisplay from '@/components/SimpleTrajectoryDisplay'
+import { useGameState } from '@/lib/useGameState'
 
 export default function PlayPage() {
-  const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [currentTrajectory, setCurrentTrajectory] = useState('')
-  const [currentCommentary, setCurrentCommentary] = useState('')
   const [showPublishForm, setShowPublishForm] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  
+  const {
+    messages,
+    trajectoryState,
+    isLoading,
+    error,
+    sendMessage,
+    resetGame,
+    clearError
+  } = useGameState()
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -39,209 +29,112 @@ export default function PlayPage() {
     scrollToBottom()
   }, [messages])
 
-  const parseAIResponse = (content: string): { 
-    trajectory: string, 
-    commentary: string, 
-    response: string 
-  } => {
-    try {
-      // Try multiple JSON extraction methods
-      let jsonStr = ''
-      
-      // Method 1: Look for JSON in code blocks
-      const codeBlockMatch = content.match(/```json\s*([\s\S]*?)\s*```/)
-      if (codeBlockMatch) {
-        jsonStr = codeBlockMatch[1]
-      } else {
-        // Method 2: Look for raw JSON (find first { to last })
-        const firstBrace = content.indexOf('{')
-        const lastBrace = content.lastIndexOf('}')
-        if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-          jsonStr = content.slice(firstBrace, lastBrace + 1)
-        }
-      }
-      
-      if (jsonStr) {
-        const parsed = JSON.parse(jsonStr)
-        
-        if (parsed.trajectory && Array.isArray(parsed.trajectory)) {
-          // Build trajectory with concept numbering
-          let conceptCounter = 1
-          const conceptMap = new Map<string, number>()
-          
-          const trajectoryLines = parsed.trajectory.map((step: any) => {
-            if (!step.left || !step.right || !step.connection) return ''
-            
-            // Assign numbers to concepts
-            if (!conceptMap.has(step.left)) {
-              conceptMap.set(step.left, conceptCounter++)
-            }
-            if (!conceptMap.has(step.right)) {
-              conceptMap.set(step.right, conceptCounter++)
-            }
-            
-            const leftNum = conceptMap.get(step.left)
-            const rightNum = conceptMap.get(step.right)
-            
-            let line = `[${step.left}]${leftNum} ${step.connection} [${step.right}]${rightNum}`
-            if (step.synthesis && step.synthesis !== null) {
-              line += ` ${step.synthesis}`
-            }
-            return line
-          }).filter(line => line.length > 0)
-          
-          // Build commentary 
-          const commentaryLines = Object.entries(parsed.commentary || {})
-            .sort(([a], [b]) => parseInt(a) - parseInt(b))
-            .map(([num, text]) => `${num}. ${text}`)
-          
-          return {
-            trajectory: trajectoryLines.join('\n'),
-            commentary: commentaryLines.join('\n'),
-            response: parsed.response || 'AI response processed'
-          }
-        }
-      }
-    } catch (error) {
-      console.log('JSON parse failed, using fallback:', error)
-    }
-    
-    // Enhanced fallback regex parsing
-    const trajectoryRegex = /\[([^\]]+)\]\s*([═─>~◊∞?!※★^v<]+)\s*\[([^\]]+)\]/g
-    const trajectoryMatches = [...content.matchAll(trajectoryRegex)]
-    const trajectory = trajectoryMatches.map((match, index) => 
-      `[${match[1]}]${index*2+1} ${match[2]} [${match[3]}]${index*2+2}`
-    ).join('\n')
-    
-    const commentaryRegex = /(?:^|\n)(\d+)[\.\)]\s*([^\n]+)/g
-    const commentaryMatches = [...content.matchAll(commentaryRegex)]
-    const commentary = commentaryMatches.map(match => `${match[1]}. ${match[2]}`).join('\n')
-    
-    return {
-      trajectory: trajectory || '',
-      commentary: commentary || '',
-      response: content
-    }
-  }
-
-  const sendMessage = async () => {
-    if (!input.trim()) return
-
-    const userMessage: Message = { role: 'user', content: input }
-    const newMessages = [...messages, userMessage]
-    setMessages(newMessages)
+  const handleSendMessage = async () => {
+    if (!input.trim() || isLoading) return
+    await sendMessage(input)
     setInput('')
-    setIsLoading(true)
-
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages })
-      })
-
-      if (!response.ok) throw new Error('Failed to send message')
-
-      const data = await response.json()
-      const assistantMessage: Message = { role: 'assistant', content: data.message }
-      
-      setMessages([...newMessages, assistantMessage])
-      
-      // Parse AI response for trajectory and commentary
-      const { trajectory, commentary } = parseAIResponse(data.message)
-      
-      if (trajectory) {
-        setCurrentTrajectory(trajectory)
-      }
-      if (commentary) {
-        setCurrentCommentary(commentary)
-      }
-
-    } catch (error) {
-      console.error('Error sending message:', error)
-      // Add error message
-      setMessages([...newMessages, { 
-        role: 'assistant', 
-        content: 'Sorry, I encountered an error. Please try again.' 
-      }])
-    } finally {
-      setIsLoading(false)
-    }
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      sendMessage()
+      handleSendMessage()
     }
   }
+
+  const hasTrajectory = trajectoryState.trajectory.length > 0
 
   return (
     <div className="min-h-screen">
       <Header currentPage="play" />
       
-      {currentTrajectory && (
-        <div className="bg-orange-600 border-b-4 border-black p-4 text-center">
+      {/* Action Bar */}
+      <div className="bg-orange-600 border-b-4 border-black p-4 flex justify-between items-center">
+        <div className="flex gap-4">
+          <button
+            onClick={resetGame}
+            className="bg-white text-black border-4 border-white px-6 py-2 font-bold uppercase tracking-wider hover:bg-neutral-200 transition-all duration-100 shadow-brutal text-sm"
+          >
+            NEW GAME
+          </button>
+        </div>
+        
+        {hasTrajectory && (
           <button
             onClick={() => setShowPublishForm(true)}
             className="bg-white text-black border-4 border-white px-8 py-3 font-bold uppercase tracking-wider hover:bg-neutral-200 transition-all duration-100 shadow-brutal"
           >
             PUBLISH GAME
           </button>
+        )}
+      </div>
+
+      {/* Error Display */}
+      {error && (
+        <div className="bg-red-100 border-4 border-red-600 p-4 m-4">
+          <div className="flex justify-between items-center">
+            <span className="text-red-800 font-medium">{error}</span>
+            <button
+              onClick={clearError}
+              className="text-red-600 hover:text-red-800 font-bold"
+            >
+              ×
+            </button>
+          </div>
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto p-8 flex gap-8 h-[calc(100vh-100px)]">
+      <div className="max-w-7xl mx-auto p-8 flex gap-8 h-[calc(100vh-140px)]">
         {/* Chat Interface */}
-        <div className="flex-1 panel flex flex-col">
+        <div className="w-[450px] panel flex flex-col flex-shrink-0">
           <div className="panel-header">
-            <h2 className="text-xl font-light text-stone-700">Conversation</h2>
+            <h2 className="text-xl font-light text-black">Conversation</h2>
           </div>
           
-          <div className="flex-1 overflow-y-auto p-8 space-y-6">
+          <div className="flex-1 overflow-y-auto p-6 space-y-4">
             {messages.length === 0 && (
-              <div className="text-stone-500 text-center py-16 font-light italic">
-                Begin by sharing what concepts or themes are calling to your attention today...
+              <div className="text-neutral-500 text-center py-12 font-medium uppercase tracking-wide text-sm">
+                BEGIN BY SHARING WHAT CONCEPTS ARE CALLING TO YOUR ATTENTION TODAY...
               </div>
             )}
             
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`chat-message ${message.role === 'user' ? 'user ml-12' : 'mr-12'}`}
+                className={`chat-message ${message.role === 'user' ? 'user ml-8' : 'mr-8'}`}
               >
-                <div className="text-sm text-stone-500 mb-3 font-light tracking-wide">
+                <div className="text-xs text-stone-500 mb-2 font-light tracking-wide">
                   {message.role === 'user' ? 'You' : 'AI Partner'}
                 </div>
-                <div className="whitespace-pre-wrap leading-relaxed">{message.content}</div>
+                <div className="whitespace-pre-wrap leading-relaxed text-sm">{message.content}</div>
               </div>
             ))}
             
             {isLoading && (
-              <div className="chat-message mr-12">
-                <div className="text-sm text-stone-500 mb-3 font-light tracking-wide">AI Partner</div>
-                <div className="text-stone-500 italic">Contemplating...</div>
+              <div className="chat-message mr-8">
+                <div className="text-xs text-stone-500 mb-2 font-light tracking-wide">AI Partner</div>
+                <div className="text-stone-500 italic text-sm">Contemplating...</div>
               </div>
             )}
             
             <div ref={messagesEndRef} />
           </div>
 
-          <div className="p-8 border-t border-stone-200">
-            <div className="flex gap-4">
+          <div className="p-6 border-t border-stone-200">
+            <div className="flex gap-3">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Share your thoughts..."
-                className="flex-1 chat-input resize-none"
-                rows={3}
+                className="flex-1 chat-input resize-none text-sm"
+                rows={2}
                 disabled={isLoading}
               />
               <button
-                onClick={sendMessage}
+                onClick={handleSendMessage}
                 disabled={isLoading || !input.trim()}
-                className="btn-primary px-8 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-primary px-6 py-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Send
               </button>
@@ -249,51 +142,19 @@ export default function PlayPage() {
           </div>
         </div>
 
-        {/* Right Column - Sticky Panels */}
-        <div className="w-[520px] flex flex-col gap-8">
-          {/* Trajectory Panel */}
-          <div className="panel sticky top-8">
-            <div className="panel-header">
-              <h2 className="text-xl font-light text-stone-700">Current Trajectory</h2>
-            </div>
-            <div className="panel-content max-h-80 overflow-y-auto">
-              {currentTrajectory ? (
-                <div className="trajectory-display">
-                  {currentTrajectory}
-                </div>
-              ) : (
-                <div className="text-stone-500 text-center py-16 font-light italic">
-                  Your trajectory will appear here as you construct it...
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Commentary Panel */}
-          <div className="panel sticky top-96">
-            <div className="panel-header">
-              <h2 className="text-xl font-light text-stone-700">Commentary</h2>
-            </div>
-            <div className="panel-content max-h-80 overflow-y-auto">
-              {currentCommentary ? (
-                <div className="commentary-text whitespace-pre-wrap">
-                  {currentCommentary}
-                </div>
-              ) : (
-                <div className="text-stone-500 text-center py-16 font-light italic">
-                  Context and footnotes will appear here...
-                </div>
-              )}
-            </div>
-          </div>
+        {/* Trajectory Panel */}
+        <div className="flex-1 sticky top-8">
+          <SimpleTrajectoryDisplay 
+            trajectoryState={trajectoryState}
+            className="h-full"
+          />
         </div>
       </div>
 
       {/* Publish Form Modal */}
       {showPublishForm && (
         <PublishForm 
-          trajectory={currentTrajectory}
-          conceptCommentary={currentCommentary}
+          trajectoryState={trajectoryState}
           onClose={() => setShowPublishForm(false)}
         />
       )}
@@ -302,12 +163,10 @@ export default function PlayPage() {
 }
 
 function PublishForm({ 
-  trajectory, 
-  conceptCommentary, 
+  trajectoryState, 
   onClose 
 }: { 
-  trajectory: string
-  conceptCommentary: string
+  trajectoryState: { trajectory: { text: string }[], commentary: Record<string, string> }
   onClose: () => void 
 }) {
   const [pseudonym, setPseudonym] = useState('')
@@ -320,13 +179,20 @@ function PublishForm({
     setIsSubmitting(true)
 
     try {
+      // Convert trajectory state to strings for API
+      const trajectoryText = trajectoryState.trajectory.map(line => line.text).join('\n')
+      const conceptCommentary = Object.entries(trajectoryState.commentary)
+        .sort(([a], [b]) => parseInt(a) - parseInt(b))
+        .map(([num, text]) => `${num}. ${text}`)
+        .join('\n')
+
       const response = await fetch('/api/games', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           pseudonym,
           title,
-          trajectory,
+          trajectory: trajectoryText,
           conceptCommentary,
           commentary
         })

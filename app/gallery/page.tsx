@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { IGame } from '@/models/Game'
 import Header from '@/components/Header'
+import SimpleTrajectoryDisplay from '@/components/SimpleTrajectoryDisplay'
 
 export default function GalleryPage() {
   const [games, setGames] = useState<IGame[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedGame, setSelectedGame] = useState<IGame | null>(null)
+
 
   useEffect(() => {
     fetchGames()
@@ -78,8 +80,14 @@ export default function GalleryPage() {
                   </div>
                 </div>
                 
-                <div className="trajectory-display mb-6 max-h-40 overflow-hidden relative">
-                  {game.trajectory}
+                <div className="mb-6 max-h-40 overflow-hidden relative">
+                  <SimpleTrajectoryDisplay 
+                    trajectoryState={{
+                      trajectory: game.trajectory.split('\n').map(text => ({ text })),
+                      commentary: {}
+                    }}
+                    className="scale-75 origin-top-left"
+                  />
                   <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent"></div>
                 </div>
                 
@@ -96,7 +104,7 @@ export default function GalleryPage() {
       {selectedGame && (
         <GameDetailModal 
           game={selectedGame} 
-          onClose={() => setSelectedGame(null)} 
+          onClose={() => setSelectedGame(null)}
         />
       )}
     </div>
@@ -105,10 +113,10 @@ export default function GalleryPage() {
 
 function GameDetailModal({ 
   game, 
-  onClose 
+  onClose
 }: { 
   game: IGame
-  onClose: () => void 
+  onClose: () => void
 }) {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -142,9 +150,23 @@ function GameDetailModal({
         
         <div className="p-8">
           <div className="mb-12">
-            <h3 className="text-2xl font-bold mb-6 uppercase border-b-4 border-black pb-2">TRAJECTORY</h3>
-            <div className="trajectory-display">
-              {game.trajectory}
+            <div className="mb-6">
+              <h3 className="text-2xl font-bold uppercase border-b-4 border-black pb-2">TRAJECTORY</h3>
+            </div>
+            <div className="min-h-96">
+              <SimpleTrajectoryDisplay 
+                trajectoryState={{
+                  trajectory: game.trajectory.split('\n').map(text => ({ text })),
+                  commentary: game.conceptCommentary.split('\n').reduce((acc, line) => {
+                    const match = line.match(/^(\d+)\.\s+(.+)$/)
+                    if (match) {
+                      acc[match[1]] = match[2]
+                    }
+                    return acc
+                  }, {} as Record<string, string>)
+                }}
+                className="h-full scale-90 origin-top-left"
+              />
             </div>
           </div>
 

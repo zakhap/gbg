@@ -66,34 +66,9 @@
     @apply bg-orange-600 text-white px-8 py-4 border-4 border-black shadow-brutal font-bold uppercase tracking-wider hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all duration-100;
   }
 
-  .trajectory-display {
-    @apply font-mono text-sm leading-relaxed whitespace-pre-wrap;
-    font-family: 'JetBrains Mono', monospace;
-    background: 
-      linear-gradient(45deg, #f5f5f5 25%, transparent 25%), 
-      linear-gradient(-45deg, #f5f5f5 25%, transparent 25%), 
-      linear-gradient(45deg, transparent 75%, #f5f5f5 75%), 
-      linear-gradient(-45deg, transparent 75%, #f5f5f5 75%);
-    background-size: 20px 20px;
-    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-    border: 4px solid #000;
-    padding: 2rem;
-  }
-
-  .trajectory-number {
-    @apply text-xs text-orange-600 font-bold;
-    vertical-align: super;
-    margin-left: 2px;
-  }
-
   .symbol-structural { @apply text-blue-700 font-bold; }
   .symbol-aesthetic { @apply text-purple-700 font-bold; }
   .symbol-synthesis { @apply text-orange-600 font-bold; }
-
-  .commentary-text {
-    @apply text-black leading-normal font-medium;
-    font-size: 0.9rem;
-  }
 
   .page-header {
     @apply bg-white border-b-4 border-black;
@@ -180,11 +155,84 @@
     background-color: #f5f5f5;
   }
 
-  .concrete-texture {
-    background-image: 
-      radial-gradient(circle at 2px 2px, #666 1px, transparent 0),
-      radial-gradient(circle at 18px 18px, #666 1px, transparent 0);
-    background-size: 20px 20px;
-    background-color: #e5e5e5;
+  /* Simple Trajectory Display */
+  .simple-trajectory-container {
+    @apply bg-white border-4 border-black flex flex-col;
+    font-family: 'JetBrains Mono', monospace;
+    height: 100%;
+  }
+
+  .simple-trajectory-container.empty {
+    @apply flex items-center justify-center;
+    min-height: 400px;
+  }
+
+  .trajectory-header {
+    @apply flex justify-between items-center px-6 py-4 border-b-4 border-black bg-neutral-200 flex-shrink-0;
+  }
+
+  .trajectory-section {
+    @apply flex flex-col flex-shrink-0;
+    max-height: 50%;
+  }
+
+  .trajectory-content {
+    @apply p-6 space-y-3 overflow-y-auto flex-1;
+    min-height: 120px;
+    overflow-x: hidden;
+  }
+
+  .trajectory-line {
+    @apply font-mono text-base leading-relaxed;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  .concept-reference {
+    @apply font-bold text-black;
+  }
+
+  .concept-number {
+    @apply text-xs text-orange-600 font-bold ml-1;
+    vertical-align: super;
+  }
+
+  .commentary-section {
+    @apply border-t-4 border-black bg-neutral-50 flex flex-col flex-1;
+    min-height: 50%;
+  }
+
+  .commentary-header {
+    @apply px-6 py-3 font-bold text-sm uppercase border-b-2 border-neutral-200 flex-shrink-0;
+  }
+
+  .commentary-content {
+    @apply p-6 space-y-4 overflow-y-auto flex-1;
+  }
+
+  .commentary-item {
+    @apply flex gap-3 text-sm leading-relaxed;
+  }
+
+  .commentary-number {
+    @apply font-bold text-orange-600 flex-shrink-0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .commentary-text {
+    @apply text-black;
+    font-family: 'Work Sans', sans-serif;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .simple-trajectory-container .trajectory-content {
+      @apply text-sm;
+    }
+    
+    .trajectory-line {
+      @apply text-sm;
+    }
   }
 }

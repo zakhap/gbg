@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import connectDB from '@/lib/mongodb'
 import Game from '@/models/Game'
+import { revalidateTag } from 'next/cache'
 
 export async function GET() {
   try {
@@ -10,7 +11,12 @@ export async function GET() {
       .limit(50)
       .lean()
 
-    return NextResponse.json(games)
+    const response = NextResponse.json(games)
+    
+    // Cache for 5 minutes, revalidate when new games are added
+    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
+    
+    return response
   } catch (error) {
     console.error('Games API error:', error)
     return NextResponse.json(
@@ -41,6 +47,14 @@ export async function POST(request: NextRequest) {
     })
 
     await game.save()
+
+    // Revalidate the games cache after adding a new game
+    try {
+      revalidateTag('games')
+    } catch (revalidateError) {
+      console.warn('Failed to revalidate games cache:', revalidateError)
+      // Don't fail the request if cache revalidation fails
+    }
 
     return NextResponse.json(game, { status: 201 })
   } catch (error) {
