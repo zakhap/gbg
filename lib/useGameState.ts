@@ -33,7 +33,12 @@ const MAX_RETRIES = 2
 
 export function useGameState() {
   const [gameState, setGameState] = useState<GameState>({
-    messages: [],
+    messages: [
+      {
+        role: 'assistant',
+        content: 'Welcome to this contemplative space. I sense you\'ve come here with something stirring in your awareness—perhaps a question, a fascination, or simply a quality of attention seeking direction.\n\nWhat concepts or themes are calling to you today? What ideas feel alive, unresolved, or curiously connected in ways you can\'t yet name?\n\nThere\'s no need to have a grand plan. Sometimes the most profound trajectories begin with the simplest wonderings...'
+      }
+    ],
     trajectoryState: {
       trajectory: [],
       commentary: {}
@@ -48,23 +53,30 @@ export function useGameState() {
       const saved = localStorage.getItem(STORAGE_KEY)
       if (saved) {
         const parsed = JSON.parse(saved)
-        setGameState(prev => ({
-          ...prev,
-          ...parsed
-        }))
+        // Only restore if there are actual user messages (not just the opening message)
+        const hasUserMessages = parsed.messages?.some((msg: Message) => msg.role === 'user')
+        if (hasUserMessages) {
+          setGameState(prev => ({
+            ...prev,
+            ...parsed
+          }))
+        }
       }
     } catch (error) {
       console.warn('Failed to load game state from localStorage:', error)
     }
   }, [])
 
-  // Save to localStorage whenever state changes
+  // Save to localStorage whenever state changes (only if there are user messages)
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        messages: gameState.messages,
-        trajectoryState: gameState.trajectoryState
-      }))
+      const hasUserMessages = gameState.messages.some(msg => msg.role === 'user')
+      if (hasUserMessages) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          messages: gameState.messages,
+          trajectoryState: gameState.trajectoryState
+        }))
+      }
     } catch (error) {
       console.warn('Failed to save game state to localStorage:', error)
     }
@@ -157,7 +169,12 @@ export function useGameState() {
 
   const resetGame = useCallback(() => {
     setGameState({
-      messages: [],
+      messages: [
+        {
+          role: 'assistant',
+          content: 'Welcome to this contemplative space. I sense you\'ve come here with something stirring in your awareness—perhaps a question, a fascination, or simply a quality of attention seeking direction.\n\nWhat concepts or themes are calling to you today? What ideas feel alive, unresolved, or curiously connected in ways you can\'t yet name?\n\nThere\'s no need to have a grand plan. Sometimes the most profound trajectories begin with the simplest wonderings...'
+        }
+      ],
       trajectoryState: {
         trajectory: [],
         commentary: {}

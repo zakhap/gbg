@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import SimpleTrajectoryDisplay from '@/components/SimpleTrajectoryDisplay'
 
 export default function Home() {
   return (
@@ -40,7 +39,7 @@ export default function Home() {
           <div className="block p-8">
             <h2 className="text-3xl mb-6">PLAY THE GAME</h2>
             <p className="text-black mb-8 font-medium">
-              Begin a new contemplative session. Collaborate with an AI partner to construct 
+              Begin a new contemplative session. Collaborate with the Magister Ludi to construct 
               trajectories of meaning and discover hidden connections between concepts.
             </p>
             <Link href="/play" className="btn-primary">
@@ -138,25 +137,57 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="mb-24">
+          <div className="text-center mb-8">
+            <h4 className="text-2xl font-bold text-black">EXAMPLE TRAJECTORY</h4>
+          </div>
           
-          <div className="mt-16 block p-8">
-            <h4 className="font-bold mb-6 text-black text-xl">EXAMPLE TRAJECTORY</h4>
-            <div className="mb-6 h-64">
-              <SimpleTrajectoryDisplay 
-                trajectoryState={{
-                  trajectory: [{ text: "[TECHNOLOGY]1 ~~~ [HUMAN NATURE]2 ═══ [CYBORG]3 ※" }],
-                  commentary: {
-                    "1": "Technology: The application of scientific knowledge for practical purposes",
-                    "2": "Human Nature: Our essential characteristics and ways of being",
-                    "3": "Cyborg: The hybrid entity emerging from human-tech integration"
-                  }
-                }}
-                className="scale-90 origin-top-left"
-              />
+          <div className="block p-6 max-w-4xl mx-auto">
+            <div className="bg-white border-4 border-black mb-6">
+              <div className="bg-neutral-200 px-6 py-4 border-b-4 border-black">
+                <h5 className="font-bold text-lg uppercase">Current Trajectory</h5>
+              </div>
+              <div className="p-6">
+                <div className="font-mono text-lg leading-relaxed">
+                  <span className="font-bold">[TECHNOLOGY]</span><span className="text-orange-600 text-sm align-super">1</span>{' '}
+                  <span className="text-purple-700 font-bold">~~~</span>{' '}
+                  <span className="font-bold">[HUMAN NATURE]</span><span className="text-orange-600 text-sm align-super">2</span>{' '}
+                  <span className="text-blue-700 font-bold">═══</span>{' '}
+                  <span className="font-bold">[CYBORG]</span><span className="text-orange-600 text-sm align-super">3</span>{' '}
+                  <span className="text-orange-600 font-bold">※</span>
+                </div>
+              </div>
             </div>
-            <p className="text-black font-medium uppercase tracking-wide">
-              Visual display shows concepts as interactive blocks with numbered footnotes.
-            </p>
+            
+            <div className="bg-neutral-50 border-4 border-black">
+              <div className="bg-neutral-200 px-6 py-3 border-b-2 border-neutral-200">
+                <h5 className="font-bold text-sm uppercase">Commentary</h5>
+              </div>
+              <div className="p-6 space-y-3">
+                <div className="flex gap-3 text-sm leading-relaxed">
+                  <span className="text-orange-600 font-bold flex-shrink-0 font-mono">1.</span>
+                  <span>Technology: The application of scientific knowledge for practical purposes</span>
+                </div>
+                <div className="flex gap-3 text-sm leading-relaxed">
+                  <span className="text-orange-600 font-bold flex-shrink-0 font-mono">2.</span>
+                  <span>Human Nature: Our essential characteristics and ways of being</span>
+                </div>
+                <div className="flex gap-3 text-sm leading-relaxed">
+                  <span className="text-orange-600 font-bold flex-shrink-0 font-mono">3.</span>
+                  <span>Cyborg: The hybrid entity emerging from human-tech integration</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-8 max-w-4xl mx-auto">
+            <div className="block-accent p-6 text-center">
+              <p className="text-white font-medium uppercase tracking-wide leading-relaxed">
+                This demonstrates the symbolic notation with numbered concept references and explanatory commentary.
+              </p>
+            </div>
           </div>
         </div>
 

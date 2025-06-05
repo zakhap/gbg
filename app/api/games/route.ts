@@ -3,18 +3,64 @@ import connectDB from '@/lib/mongodb'
 import Game from '@/models/Game'
 import { revalidateTag } from 'next/cache'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     await connectDB()
-    const games = await Game.find({})
-      .sort({ createdAt: -1 })
-      .limit(50)
-      .lean()
-
-    const response = NextResponse.json(games)
     
-    // Cache for 5 minutes, revalidate when new games are added
-    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
+    const { searchParams } = new URL(request.url)
+    const page = parseInt(searchParams.get('page') || '1')
+    const limit = parseInt(searchParams.get('limit') || '20')
+    const search = searchParams.get('search') || ''
+    
+    // Validate pagination params
+    const validatedPage = Math.max(1, Math.min(page, 1000)) // Max 1000 pages
+    const validatedLimit = Math.max(1, Math.min(limit, 50)) // Max 50 per page
+    const skip = (validatedPage - 1) * validatedLimit
+    
+    // Build query
+    let query = {}
+    if (search.trim()) {
+      query = {
+        $or: [
+          { title: { $regex: search, $options: 'i' } },
+          { pseudonym: { $regex: search, $options: 'i' } },
+          { commentary: { $regex: search, $options: 'i' } }
+        ]
+      }
+    }
+    
+    // Execute queries in parallel
+    const [games, totalCount] = await Promise.all([
+      Game.find(query)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(validatedLimit)
+        .select('pseudonym title trajectory commentary createdAt') // Exclude large conceptCommentary field
+        .lean(),
+      Game.countDocuments(query)
+    ])
+    
+    const totalPages = Math.ceil(totalCount / validatedLimit)
+    const hasNextPage = validatedPage < totalPages
+    const hasPreviousPage = validatedPage > 1
+    
+    const result = {
+      games,
+      pagination: {
+        currentPage: validatedPage,
+        totalPages,
+        totalCount,
+        limit: validatedLimit,
+        hasNextPage,
+        hasPreviousPage
+      }
+    }
+
+    const response = NextResponse.json(result)
+    
+    // Aggressive caching for paginated results
+    // Cache for 10 minutes, with stale-while-revalidate for better UX
+    response.headers.set('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=1200')
     
     return response
   } catch (error) {

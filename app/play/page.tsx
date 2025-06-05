@@ -92,19 +92,13 @@ export default function PlayPage() {
           </div>
           
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
-            {messages.length === 0 && (
-              <div className="text-neutral-500 text-center py-12 font-medium uppercase tracking-wide text-sm">
-                BEGIN BY SHARING WHAT CONCEPTS ARE CALLING TO YOUR ATTENTION TODAY...
-              </div>
-            )}
-            
             {messages.map((message, index) => (
               <div
                 key={index}
                 className={`chat-message ${message.role === 'user' ? 'user ml-8' : 'mr-8'}`}
               >
                 <div className="text-xs text-stone-500 mb-2 font-light tracking-wide">
-                  {message.role === 'user' ? 'You' : 'AI Partner'}
+                  {message.role === 'user' ? 'You' : 'Magister Ludi'}
                 </div>
                 <div className="whitespace-pre-wrap leading-relaxed text-sm">{message.content}</div>
               </div>
@@ -112,7 +106,7 @@ export default function PlayPage() {
             
             {isLoading && (
               <div className="chat-message mr-8">
-                <div className="text-xs text-stone-500 mb-2 font-light tracking-wide">AI Partner</div>
+                <div className="text-xs text-stone-500 mb-2 font-light tracking-wide">Magister Ludi</div>
                 <div className="text-stone-500 italic text-sm">Contemplating...</div>
               </div>
             )}
