@@ -3,7 +3,7 @@
 import Link from 'next/link'
 
 interface HeaderProps {
-  currentPage?: 'home' | 'guide' | 'practice' | 'examples' | 'play' | 'gallery'
+  currentPage?: 'home' | 'introduction' | 'guide' | 'practice' | 'examples' | 'play' | 'gallery'
 }
 
 export default function Header({ currentPage }: HeaderProps) {

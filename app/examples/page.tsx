@@ -3,6 +3,42 @@ import Header from '@/components/Header'
 import LearningFooter from '@/components/LearningFooter'
 
 export default function ExamplesPage() {
+  const trajectoryExamples = {
+    opening: '[Durkheim] ═══ [Sacred and profane] ~~~ [Binary opposition]',
+    dialectical: '[Sacred and profane] >>> [Secularization] ??? [Sacred persists] ※',
+    archaeological: '[Sacred persists] vvv [Consumer culture] vvv [Brand loyalty] vvv [Religious devotion]',
+    contemporary: '[Brand loyalty] ~~~ [Social media] ~~~ [Influencer worship] ◊',
+    recursive: '[Influencer worship] ∞∞∞ [Sacred and profane] via [Authenticity]',
+    transcendent: '[Authenticity] ~~~ [Performance] ~~~ [Ritual] ~~~ [Sacred]'
+  }
+
+  const democracyExamples = {
+    philosophical: '[Object-oriented ontology] ═══ [Flat ontology] ~~~ [Democracy]',
+    political: '[Democracy] ═══ [Equal representation] ~~~ [Equal reality] ※',
+    technological: '[Equal reality] >>> [Internet of Things] ═══ [Smart objects]',
+    grotesque: '[Digital revolution] ∞∞∞ [Democracy] via [Post-human politics]'
+  }
+
+  const narcissusExamples = {
+    mythic: '[Narcissus myth] ~~~ [Technology as extension] ═══ [Self-amputation]',
+    phenomenological: '[Self-amputation] ~~~ [Phantom limb syndrome] ═══ [Technological unconscious]',
+    narcotic: '[Diminishment] ~~~ [Narcotic effect] ═══ [Addiction cycle] ◊',
+    transcendent: '[Conscious participation] ~~~ [Technological art] ═══ [Human enhancement]'
+  }
+
+  const algorithmExamples = {
+    freudian: '[Freudian unconscious] ~~~ [Machine learning] ═══ [Pattern recognition]',
+    projection: '[Human behavior patterns] ~~~ [Transference] ═══ [Algorithmic bias]',
+    therapeutic: '[Mass psychology] ??? [Algorithmic therapy] ~~~ [Digital analysis]',
+    transcendent: '[Co-evolutionary healing] ∞∞∞ [Collective individuation] ~~~ [Conscious technology]'
+  }
+
+  const attentionExamples = {
+    ecological: '[Attention span] ~~~ [Endangered species] ═══ [Habitat destruction]',
+    climate: '[Attention monoculture] ^^^ [Filter bubbles] ^^^ [Polarization] ^^^ [Social climate change] ◊',
+    transcendent: '[Sustainable attention economy] ∞∞∞ [Ecological wisdom] ~~~ [Consciousness ecology]'
+  }
+
   return (
     <div className="min-h-screen grid-brutal">
       <Header currentPage="examples" />
@@ -20,36 +56,36 @@ export default function ExamplesPage() {
 
           <h3><strong>OPENING GAMBIT:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Durkheim] ═══ [Sacred and profane] ~~~ [Binary opposition]
+{trajectoryExamples.opening}
           </pre>
 
           <h3><strong>DIALECTICAL DEVELOPMENT:</strong> ⚖️</h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Sacred and profane] >>> [Secularization] ??? [Sacred persists] ※
+{trajectoryExamples.dialectical}
           </pre>
           <p><em>"The sacred doesn't disappear, it migrates"</em></p>
 
           <h3><strong>ARCHAEOLOGICAL DIG:</strong> 🏺</h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Sacred persists] vvv [Consumer culture] vvv [Brand loyalty] vvv [Religious devotion]
+{trajectoryExamples.archaeological}
           </pre>
           <p><em>"Apple stores as cathedrals, products as relics"</em></p>
 
           <h3><strong>CONTEMPORARY MANIFESTATION:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Brand loyalty] ~~~ [Social media] ~~~ [Influencer worship] ◊
+{trajectoryExamples.contemporary}
           </pre>
           <p><em>"We create new saints for a godless age"</em></p>
 
           <h3><strong>RECURSIVE REVELATION:</strong> 🪞</h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Influencer worship] ∞∞∞ [Sacred and profane] via [Authenticity]
+{trajectoryExamples.recursive}
           </pre>
           <p><em>"The sacred returns as 'authentic self-expression'"</em></p>
 
           <h3><strong>TRANSCENDENT SYNTHESIS ★:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Authenticity] ~~~ [Performance] ~~~ [Ritual] ~~~ [Sacred]
+{trajectoryExamples.transcendent}
           </pre>
           <p><em>"The more we perform authenticity, the more sacred performance becomes"</em></p>
 
@@ -62,24 +98,24 @@ export default function ExamplesPage() {
 
           <h3><strong>PHILOSOPHICAL OPENING:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Object-oriented ontology] ═══ [Flat ontology] ~~~ [Democracy]
+{democracyExamples.philosophical}
           </pre>
 
           <h3><strong>POLITICAL EXTENSION:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Democracy] ═══ [Equal representation] ~~~ [Equal reality] ※
+{democracyExamples.political}
           </pre>
           <p><em>"If objects have equal ontological status, what about political status?"</em></p>
 
           <h3><strong>TECHNOLOGICAL MANIFESTATION:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Equal reality] >>> [Internet of Things] ═══ [Smart objects]
+{democracyExamples.technological}
           </pre>
           <p><em>"Objects get representation through sensors and data"</em></p>
 
           <h3><strong>GROTESQUE SYNTHESIS ★:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Digital revolution] ∞∞∞ [Democracy] via [Post-human politics]
+{democracyExamples.grotesque}
           </pre>
           <p><em>"We discover that objects were always more democratic than humans—they actually listen to each other"</em></p>
 
@@ -92,24 +128,24 @@ export default function ExamplesPage() {
 
           <h3><strong>MYTHIC OPENING:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Narcissus myth] ~~~ [Technology as extension] ═══ [Self-amputation]
+{narcissusExamples.mythic}
           </pre>
 
           <h3><strong>PHENOMENOLOGICAL DEVELOPMENT:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Self-amputation] ~~~ [Phantom limb syndrome] ═══ [Technological unconscious]
+{narcissusExamples.phenomenological}
           </pre>
           <p><em>"We feel the absence of what we never knew we had"</em></p>
 
           <h3><strong>NARCOTIC REALIZATION:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Diminishment] ~~~ [Narcotic effect] ═══ [Addiction cycle] ◊
+{narcissusExamples.narcotic}
           </pre>
           <p><em>"Technology is the drug that creates the disease it pretends to cure"</em></p>
 
           <h3><strong>TRANSCENDENT SYNTHESIS ★:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Conscious participation] ~~~ [Technological art] ═══ [Human enhancement]
+{narcissusExamples.transcendent}
           </pre>
           <p><em>"When we understand our tools, we can use them without being used by them"</em></p>
 
@@ -122,24 +158,24 @@ export default function ExamplesPage() {
 
           <h3><strong>FREUDIAN OPENING:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Freudian unconscious] ~~~ [Machine learning] ═══ [Pattern recognition]
+{algorithmExamples.freudian}
           </pre>
 
           <h3><strong>PROJECTION MECHANISM:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Human behavior patterns] ~~~ [Transference] ═══ [Algorithmic bias]
+{algorithmExamples.projection}
           </pre>
           <p><em>"We teach machines our neuroses and call it intelligence"</em></p>
 
           <h3><strong>THERAPEUTIC POSSIBILITY:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Mass psychology] ??? [Algorithmic therapy] ~~~ [Digital analysis]
+{algorithmExamples.therapeutic}
           </pre>
           <p><em>"If machines have unconscious minds, they need analysis too"</em></p>
 
           <h3><strong>TRANSCENDENT SYNTHESIS ★:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Co-evolutionary healing] ∞∞∞ [Collective individuation] ~~~ [Conscious technology]
+{algorithmExamples.transcendent}
           </pre>
           <p><em>"We become fully human only when our machines become fully conscious"</em></p>
 
@@ -152,18 +188,18 @@ export default function ExamplesPage() {
 
           <h3><strong>ECOLOGICAL OPENING:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Attention span] ~~~ [Endangered species] ═══ [Habitat destruction]
+{attentionExamples.ecological}
           </pre>
 
           <h3><strong>CLIMATE CRISIS:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Attention monoculture] ^^^ [Filter bubbles] ^^^ [Polarization] ^^^ [Social climate change] ◊
+{attentionExamples.climate}
           </pre>
           <p><em>"Information overload creates the attention equivalent of global warming"</em></p>
 
           <h3><strong>TRANSCENDENT SYNTHESIS ★:</strong></h3>
           <pre className="trajectory-display bg-gray-100 p-4 rounded">
-[Sustainable attention economy] ∞∞∞ [Ecological wisdom] ~~~ [Consciousness ecology]
+{attentionExamples.transcendent}
           </pre>
           <p><em>"What we do to our attention, we do to our planet—and vice versa"</em></p>
 
