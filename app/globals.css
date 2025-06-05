@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: Monaco, Menlo, 'Ubuntu Mono', monospace;
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer components {
+  .trajectory-display {
+    @apply font-mono text-sm leading-relaxed whitespace-pre-wrap;
+  }
+  
+  .concept {
+    @apply text-blue-700 font-medium;
+  }
+  
+  .symbol {
+    @apply text-gray-600 mx-1;
+  }
+  
+  .synthesis {
+    @apply text-purple-700 font-bold;
+  }
+  
+  .trajectory-display {
+    line-height: 1.8;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  }
+  
+  .trajectory-display::before {
+    content: '';
+  }
+  
+  /* Style concept numbers */
+  .trajectory-display {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+  }
+}
