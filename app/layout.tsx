@@ -1,9 +1,10 @@
 import './globals.css'
 import type { Metadata } from 'next'
+import BetaBanner from '@/components/BetaBanner'
 
 export const metadata: Metadata = {
-  title: 'Glass Bead Game',
-  description: 'A contemplative practice of intellectual improvisation',
+  title: 'Glass Bead Game (SUPER BETA)',
+  description: 'A contemplative practice of intellectual improvisation - Currently in experimental beta',
 }
 
 export default function RootLayout({
@@ -13,7 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <BetaBanner />
+        {children}
+      </body>
     </html>
   )
 }

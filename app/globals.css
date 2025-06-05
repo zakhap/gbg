@@ -225,6 +225,40 @@
     font-family: 'Work Sans', sans-serif;
   }
 
+  /* Beta Banner */
+  .beta-banner {
+    @apply py-3 px-4 relative z-50;
+    min-height: 48px;
+  }
+
+  .beta-ticker-content {
+    @apply overflow-hidden whitespace-nowrap;
+    animation: scroll-left 20s linear infinite;
+  }
+
+  .beta-ticker-text {
+    @apply inline-block font-bold uppercase tracking-wider text-sm;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+
+  /* Beta Badge */
+  .beta-badge {
+    @apply bg-orange-600 text-white px-3 py-1 border-2 border-black text-xs font-bold uppercase tracking-wide;
+    box-shadow: 4px 4px 0px #000000;
+    transform: rotate(-5deg);
+    position: relative;
+    top: -2px;
+  }
+
   /* Mobile Responsive */
   @media (max-width: 768px) {
     .simple-trajectory-container .trajectory-content {
@@ -233,6 +267,15 @@
     
     .trajectory-line {
       @apply text-sm;
+    }
+
+    .beta-ticker-text {
+      @apply text-xs;
+    }
+
+    .beta-badge {
+      @apply text-xs px-2 py-1;
+      box-shadow: 2px 2px 0px #000000;
     }
   }
 }

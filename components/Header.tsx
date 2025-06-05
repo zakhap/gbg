@@ -25,9 +25,12 @@ export default function Header({ currentPage }: HeaderProps) {
   return (
     <header className="page-header sticky top-0 z-40">
       <div className="container-brutal py-4 md:py-6 flex flex-col md:flex-row gap-4 md:justify-between md:items-center">
-        <Link href="/" className="text-xl md:text-2xl font-bold text-black tracking-wide uppercase text-center md:text-left">
-          GLASS BEAD GAME
-        </Link>
+        <div className="flex items-center justify-center md:justify-start gap-3">
+          <Link href="/" className="text-xl md:text-2xl font-bold text-black tracking-wide uppercase text-center md:text-left">
+            GLASS BEAD GAME
+          </Link>
+          <span className="beta-badge">SUPER BETA</span>
+        </div>
         <div className="flex flex-wrap gap-2 md:gap-4 justify-center md:justify-end">
           {navLinks
             .filter(link => link.key !== currentPage)

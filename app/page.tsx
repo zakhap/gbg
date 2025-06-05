@@ -8,6 +8,20 @@ export default function Home() {
           <h1 className="text-8xl mb-8 text-black tracking-tighter">
             GLASS BEAD GAME
           </h1>
+          
+          {/* Beta Warning */}
+          <div className="bg-red-600 text-white border-4 border-black shadow-brutal p-6 mx-auto max-w-4xl mb-8 animate-pulse">
+            <div className="flex items-center justify-center gap-4 mb-3">
+              <span className="text-3xl">⚠️</span>
+              <h2 className="text-2xl font-bold uppercase tracking-wider">SUPER BETA VERSION</h2>
+              <span className="text-3xl">⚠️</span>
+            </div>
+            <p className="text-lg font-bold uppercase tracking-wide">
+              This is an experimental build. Expect bugs, incomplete features, and frequent changes. 
+              Your feedback is essential for development!
+            </p>
+          </div>
+
           <div className="block bg-orange-600 text-white p-8 mx-auto max-w-4xl">
             <p className="text-xl font-bold uppercase tracking-wide">
               A practice of intellectual improvisation, treating knowledge as a living constellation 
